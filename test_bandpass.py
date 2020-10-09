@@ -4,27 +4,27 @@ def butter_bandpass(lowcut, highcut, fs, order=5):
     nyq = 0.5 * fs
     low = lowcut / nyq
     high = highcut / nyq
-    b, a = butter(order, [low, high], btype = 'band')
+    b, a = butter(order, [low, high], btype='band')
     return b, a
+
 
 def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
     y = lfilter(b, a, data)
     return y
 
-if __name__ == "__main__":
+
+def run():
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy.signal import freqz
 
-    # sample rate + cutoff frequencies
+    # Sample rate and desired cutoff frequencies (in Hz).
     fs = 5000.0
-    lowcut = 75     # a typicall male will talk between 85 and 180 Hz
-    highcut = 265   # a typicall woman will talk between 165 and 255 Hz
+    lowcut = 75.0           # a male will talk between 85-180 hz
+    highcut = 265.0         # a woman will talk between 165-255 hz
 
-
-
-     # Plot the frequency response for a few different orders.
+    # Plot the frequency response for a few different orders.
     plt.figure(1)
     plt.clf()
     for order in [3, 6, 9]:
@@ -41,10 +41,10 @@ if __name__ == "__main__":
 
     # Filter a noisy signal.
     T = 0.05
-    nsamples = T * fs
+    nsamples = int(T * fs)
     t = np.linspace(0, T, nsamples, endpoint=False)
     a = 0.02
-    f0 = 200.0
+    f0 = 190.0
     x = 0.1 * np.sin(2 * np.pi * 1.2 * np.sqrt(t))
     x += 0.01 * np.cos(2 * np.pi * 312 * t + 0.1)
     x += a * np.cos(2 * np.pi * f0 * t + .11)
@@ -62,3 +62,6 @@ if __name__ == "__main__":
     plt.legend(loc='upper left')
 
     plt.show()
+
+
+run()
